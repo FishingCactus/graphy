@@ -58,9 +58,15 @@ namespace Tayx.Graphy.Utils
                 {
                     if (_instance == null)
                     {
-                        _instance = (T)FindObjectOfType(typeof(T));
+                        var typeOfT = typeof(T);
+                        var possibleInstances = FindObjectsOfType(typeOfT);
+                        if ( possibleInstances.Length == 0)
+                        {
+                            return null;
+                        }
+                        _instance = (T)possibleInstances[0];
 
-                        if (FindObjectsOfType(typeof(T)).Length > 1)
+                        if (possibleInstances.Length > 1)
                         {
                             //Debug.LogError("[Singleton] Something went really wrong " +
                             //    " - there should never be more than 1 singleton!" +
@@ -72,19 +78,19 @@ namespace Tayx.Graphy.Utils
                         {
                             //GameObject singleton = new GameObject();
                             //_instance = singleton.AddComponent<T>();
-                            //singleton.name = "(singleton) " + typeof(T).ToString();
+                            //singleton.name = "(singleton) " + typeOfT.ToString();
 
                             //DontDestroyOnLoad(singleton);
 
-                            //Debug.Log("[Singleton] An instance of " + typeof(T) +
+                            //Debug.Log("[Singleton] An instance of " + typeOfT +
                             //    " is needed in the scene, so '" + singleton +
                             //    "' was created with DontDestroyOnLoad.");
 
                             Debug.Log
                             (
-                                "[Singleton] An instance of " + typeof(T) +
+                                "[Singleton] An instance of " + typeOfT +
                                 " is trying to be accessed, but it wasn't initialized first. " +
-                                "Make sure to add an instance of " + typeof(T) + " in the scene before " +
+                                "Make sure to add an instance of " + typeOfT + " in the scene before " +
                                 " trying to access it."
                             );
                         }
